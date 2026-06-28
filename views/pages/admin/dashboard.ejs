@@ -1,0 +1,103 @@
+<section class="py-4">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold mb-0">Admin Dashboard</h2>
+      <div class="btn-group">
+        <a href="/admin/users" class="btn btn-outline-success btn-sm">Manage Users</a>
+        <a href="/admin/donations" class="btn btn-outline-primary btn-sm">Manage Donations</a>
+      </div>
+    </div>
+
+    <h5 class="text-muted small text-uppercase mt-3">Users</h5>
+    <div class="row g-3">
+      <div class="col-md-3 col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">Total Users</div>
+        <div class="h3 fw-bold text-dark mb-0"><%= stats.totals.users %></div>
+      </div></div></div>
+      <div class="col-md-3 col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">Donors</div>
+        <div class="h3 fw-bold text-success mb-0"><%= stats.totals.donors %></div>
+      </div></div></div>
+      <div class="col-md-3 col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">NGOs</div>
+        <div class="h3 fw-bold text-primary mb-0"><%= stats.totals.ngos %></div>
+      </div></div></div>
+      <div class="col-md-3 col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">Total Donations</div>
+        <div class="h3 fw-bold text-warning mb-0"><%= stats.totals.donations %></div>
+      </div></div></div>
+    </div>
+
+    <h5 class="text-muted small text-uppercase mt-4">Donation status</h5>
+    <div class="row g-3">
+      <div class="col-md col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">Pending</div>
+        <div class="h4 fw-bold text-warning mb-0"><%= stats.donations.pending %></div>
+      </div></div></div>
+      <div class="col-md col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">Accepted</div>
+        <div class="h4 fw-bold text-info mb-0"><%= stats.donations.accepted %></div>
+      </div></div></div>
+      <div class="col-md col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">Collected</div>
+        <div class="h4 fw-bold text-success mb-0"><%= stats.donations.collected %></div>
+      </div></div></div>
+      <div class="col-md col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">Expired</div>
+        <div class="h4 fw-bold text-secondary mb-0"><%= stats.donations.expired %></div>
+      </div></div></div>
+      <div class="col-md col-6"><div class="card shadow-sm border-0"><div class="card-body">
+        <div class="text-muted small">Cancelled</div>
+        <div class="h4 fw-bold text-danger mb-0"><%= stats.donations.cancelled %></div>
+      </div></div></div>
+    </div>
+
+    <div class="row g-3 mt-4">
+      <div class="col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>Recent Users</strong>
+            <a href="/admin/users" class="small">View all</a>
+          </div>
+          <div class="list-group list-group-flush">
+            <% if (!stats.recentUsers.length) { %>
+              <div class="list-group-item text-muted small">No users yet.</div>
+            <% } %>
+            <% stats.recentUsers.forEach(function(u) { %>
+              <a class="list-group-item list-group-item-action d-flex justify-content-between" href="/admin/users/<%= u.id %>">
+                <span>
+                  <i class="bi bi-person-circle me-1"></i>
+                  <%= u.name || u.organizationName || u.email %>
+                  <span class="badge bg-light text-dark ms-1"><%= u.role %></span>
+                </span>
+                <small class="text-muted"><%= new Date(u.createdAt).toLocaleDateString() %></small>
+              </a>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>Recent Donations</strong>
+            <a href="/admin/donations" class="small">View all</a>
+          </div>
+          <div class="list-group list-group-flush">
+            <% if (!stats.recentDonations.length) { %>
+              <div class="list-group-item text-muted small">No donations yet.</div>
+            <% } %>
+            <% stats.recentDonations.forEach(function(d) { %>
+              <a class="list-group-item list-group-item-action d-flex justify-content-between" href="/admin/donations/<%= d.id %>">
+                <span>
+                  <i class="bi bi-box-seam me-1"></i><%= d.foodName %>
+                  <span class="badge bg-light text-dark ms-1"><%= d.status %></span>
+                </span>
+                <small class="text-muted"><%= new Date(d.createdAt).toLocaleDateString() %></small>
+              </a>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

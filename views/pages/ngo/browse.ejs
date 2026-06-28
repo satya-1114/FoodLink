@@ -1,0 +1,95 @@
+<section class="py-4">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold mb-0">Browse Available Donations</h2>
+      <span class="text-muted small">Status: Pending</span>
+    </div>
+
+    <form class="card shadow-sm border-0 mb-4" method="GET" action="/ngo/donations">
+      <div class="card-body">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <label class="form-label small">Search food name</label>
+            <input type="search" name="q" maxlength="100" value="<%= filters.q %>"
+                   class="form-control" placeholder="e.g. biryani" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small">Category</label>
+            <select name="foodCategory" class="form-select">
+              <option value="">All</option>
+              <% categories.forEach(function(c){ %>
+                <option value="<%= c %>" <%= filters.foodCategory === c ? 'selected' : '' %>><%= c %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">Veg / Non-Veg</label>
+            <select name="vegType" class="form-select">
+              <option value="">All</option>
+              <% vegTypes.forEach(function(v){ %>
+                <option value="<%= v %>" <%= filters.vegType === v ? 'selected' : '' %>><%= v %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small">City</label>
+            <input type="text" name="city" maxlength="80" value="<%= filters.city %>"
+                   class="form-control" placeholder="e.g. Mumbai" />
+          </div>
+        </div>
+        <div class="mt-3 d-flex gap-2">
+          <button type="submit" class="btn btn-success btn-sm">
+            <i class="bi bi-funnel me-1"></i> Apply Filters
+          </button>
+          <a href="/ngo/donations" class="btn btn-outline-secondary btn-sm">Reset</a>
+        </div>
+      </div>
+    </form>
+
+    <% if (!result.items.length) { %>
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center py-5">
+          <i class="bi bi-inbox display-4 text-muted"></i>
+          <p class="text-muted mt-3 mb-0">No donations match your filters.</p>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="row g-3">
+        <% result.items.forEach(function(d){ %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+              <% if (d.imageUrl) { %>
+                <img src="<%= d.imageUrl %>" alt="<%= d.foodName %>"
+                     class="card-img-top" style="height:180px; object-fit:cover;" />
+              <% } else { %>
+                <div class="bg-light d-flex align-items-center justify-content-center"
+                     style="height:180px;">
+                  <i class="bi bi-image text-muted" style="font-size:2.5rem;"></i>
+                </div>
+              <% } %>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title mb-1"><%= d.foodName %></h5>
+                <div class="text-muted small mb-2">
+                  <%= d.foodCategory %> · <%= d.vegType %> · Qty: <%= d.quantity %>
+                </div>
+                <div class="small text-muted mb-2">
+                  <i class="bi bi-geo-alt"></i>
+                  <%= d.city ? d.city.replace(/\b\w/g, function(c){return c.toUpperCase();}) : d.pickupAddress %>
+                </div>
+                <div class="small text-muted mb-3">
+                  <i class="bi bi-clock"></i>
+                  Pickup: <%= d.pickupTime ? new Date(d.pickupTime).toLocaleString() : '—' %>
+                </div>
+                <a href="/ngo/donations/<%= d.id %>" class="btn btn-outline-success btn-sm mt-auto">
+                  View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <%- include('../../partials/pagination', { result: result, query: filters, basePath: '/ngo/donations' }) %>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+/* FoodLink global styles */
+:root {
+  --fl-primary: #198754;
+  --fl-primary-dark: #146c43;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.navbar-brand {
+  letter-spacing: .3px;
+}
+
+.card {
+  border-radius: .75rem;
+}
+
+a.link-light:hover {
+  text-decoration: underline !important;
+}
+
+.btn-success {
+  background-color: var(--fl-primary);
+  border-color: var(--fl-primary);
+}
+.btn-success:hover {
+  background-color: var(--fl-primary-dark);
+  border-color: var(--fl-primary-dark);
+}

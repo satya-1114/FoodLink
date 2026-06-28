@@ -1,0 +1,111 @@
+<%
+  function badgeClass(status) {
+    switch (status) {
+      case 'Pending': return 'bg-warning text-dark';
+      case 'Accepted': return 'bg-primary';
+      case 'Collected': return 'bg-success';
+      case 'Expired': return 'bg-secondary';
+      case 'Cancelled': return 'bg-dark';
+      default: return 'bg-light text-dark';
+    }
+  }
+  const backUrl = viewer === 'donor' ? '/donor/donations' : '/ngo/donations';
+%>
+<section class="py-4">
+  <div class="container">
+    <a href="<%= backUrl %>" class="text-decoration-none small">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+
+    <div class="card shadow-sm border-0 mt-3">
+      <div class="row g-0">
+        <div class="col-md-5">
+          <% if (donation.imageUrl) { %>
+            <img src="<%= donation.imageUrl %>" alt="<%= donation.foodName %>"
+                 class="img-fluid rounded-start w-100" style="object-fit:cover; max-height: 380px;" />
+          <% } else { %>
+            <div class="bg-light d-flex align-items-center justify-content-center h-100 rounded-start"
+                 style="min-height: 240px;">
+              <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
+            </div>
+          <% } %>
+        </div>
+        <div class="col-md-7">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <h3 class="fw-bold mb-1"><%= donation.foodName %></h3>
+              <span class="badge <%= badgeClass(donation.status) %>"><%= donation.status %></span>
+            </div>
+            <div class="text-muted mb-3">
+              <%= donation.foodCategory %> · <%= donation.vegType %> · Qty: <%= donation.quantity %>
+            </div>
+
+            <% if (donation.description) { %>
+              <p class="mb-3"><%= donation.description %></p>
+            <% } %>
+
+            <dl class="row small mb-0">
+              <dt class="col-sm-4">Pickup Address</dt>
+              <dd class="col-sm-8">
+                <%= donation.pickupAddress %><% if (donation.city) { %> <span class="text-muted">(<%= donation.city %>)</span><% } %>
+              </dd>
+              <dt class="col-sm-4">Pickup Time</dt>
+              <dd class="col-sm-8"><%= donation.pickupTime ? new Date(donation.pickupTime).toLocaleString() : '—' %></dd>
+              <dt class="col-sm-4">Expiry Time</dt>
+              <dd class="col-sm-8"><%= donation.expiryTime ? new Date(donation.expiryTime).toLocaleString() : '—' %></dd>
+              <dt class="col-sm-4">Contact</dt>
+              <dd class="col-sm-8"><%= donation.contactNumber %></dd>
+              <dt class="col-sm-4">Posted</dt>
+              <dd class="col-sm-8"><%= new Date(donation.createdAt).toLocaleString() %></dd>
+              <% if (donation.acceptedAt) { %>
+                <dt class="col-sm-4">Accepted</dt>
+                <dd class="col-sm-8"><%= new Date(donation.acceptedAt).toLocaleString() %></dd>
+              <% } %>
+              <% if (donation.collectedAt) { %>
+                <dt class="col-sm-4">Collected</dt>
+                <dd class="col-sm-8"><%= new Date(donation.collectedAt).toLocaleString() %></dd>
+              <% } %>
+              <% if (donation.cancelledAt) { %>
+                <dt class="col-sm-4">Cancelled</dt>
+                <dd class="col-sm-8"><%= new Date(donation.cancelledAt).toLocaleString() %></dd>
+              <% } %>
+              <% if (donation.expiredAt) { %>
+                <dt class="col-sm-4">Expired</dt>
+                <dd class="col-sm-8"><%= new Date(donation.expiredAt).toLocaleString() %></dd>
+              <% } %>
+            </dl>
+
+            <% if (viewer === 'donor' && donation.status === STATUS.PENDING) { %>
+              <form method="POST" action="/donor/donations/<%= donation.id %>/delete"
+                    class="mt-4" onsubmit="return confirm('Delete this donation?');">
+                <button class="btn btn-outline-danger" type="submit">
+                  <i class="bi bi-trash me-1"></i> Delete Donation
+                </button>
+              </form>
+            <% } %>
+
+            <% if (viewer === 'ngo') { %>
+              <div class="mt-4 d-flex gap-2">
+                <% if (typeof canAccept !== 'undefined' && canAccept) { %>
+                  <form method="POST" action="/ngo/donations/<%= donation.id %>/accept">
+                    <button class="btn btn-success" type="submit">
+                      <i class="bi bi-check2-circle me-1"></i> Accept Donation
+                    </button>
+                  </form>
+                <% } %>
+                <% if (typeof canMarkCollected !== 'undefined' && canMarkCollected) { %>
+                  <form method="POST" action="/ngo/donations/<%= donation.id %>/collected"
+                        onsubmit="return confirm('Mark this donation as Collected?');">
+                    <button class="btn btn-primary" type="submit">
+                      <i class="bi bi-bag-check me-1"></i> Mark Collected
+                    </button>
+                  </form>
+                <% } %>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

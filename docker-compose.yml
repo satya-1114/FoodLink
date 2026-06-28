@@ -1,0 +1,37 @@
+# Root docker-compose — production-flavor single service.
+# For development with hot reload, use docker/docker-compose.dev.yml.
+
+services:
+  app:
+    build: .
+    image: foodlink:latest
+    container_name: foodlink
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      LOG_LEVEL: info
+      SESSION_SECRET: ${SESSION_SECRET}
+      FIREBASE_SERVICE_ACCOUNT: /run/secrets/firebase
+      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
+      DB_DRIVER: ${DB_DRIVER:-firestore}
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads:/app/public/uploads
+      - logs:/var/log/foodlink
+    secrets:
+      - firebase
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+secrets:
+  firebase:
+    file: ./serviceAccountKey.json
+
+volumes:
+  uploads:
+  logs:

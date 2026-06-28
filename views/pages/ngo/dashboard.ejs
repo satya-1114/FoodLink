@@ -1,0 +1,69 @@
+<section class="py-4">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="fw-bold mb-1">NGO Dashboard</h2>
+        <p class="text-muted mb-0">
+          <%= profile && profile.organizationName ? profile.organizationName : currentUser.name %>
+        </p>
+      </div>
+      <a href="/ngo/donations" class="btn btn-success">
+        <i class="bi bi-search me-1"></i> Browse Donations
+      </a>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0"><div class="card-body">
+          <div class="text-muted small">Total Accepted</div>
+          <div class="display-6 fw-bold text-primary"><%= stats.totalAccepted %></div>
+        </div></div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0"><div class="card-body">
+          <div class="text-muted small">Pending Pickup</div>
+          <div class="display-6 fw-bold text-warning"><%= stats.pendingPickup %></div>
+        </div></div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0"><div class="card-body">
+          <div class="text-muted small">Collected</div>
+          <div class="display-6 fw-bold text-success"><%= stats.collected %></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mt-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-semibold mb-0">Recent Accepted Donations</h5>
+          <a href="/ngo/accepted" class="small">View all →</a>
+        </div>
+        <% if (!recent.length) { %>
+          <p class="text-muted mb-0">
+            You haven't accepted any donations yet. <a href="/ngo/donations">Browse available donations</a>.
+          </p>
+        <% } else { %>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+              <thead class="text-muted small">
+                <tr><th>Food</th><th>Qty</th><th>Pickup</th><th>Accepted</th><th></th></tr>
+              </thead>
+              <tbody>
+                <% recent.forEach(function(d){ %>
+                  <tr>
+                    <td><%= d.foodName %></td>
+                    <td><%= d.quantity %></td>
+                    <td class="small"><%= d.pickupTime ? new Date(d.pickupTime).toLocaleString() : '—' %></td>
+                    <td class="small text-muted"><%= d.acceptedAt ? new Date(d.acceptedAt).toLocaleString() : '—' %></td>
+                    <td class="text-end"><a href="/ngo/donations/<%= d.id %>" class="btn btn-sm btn-outline-secondary">View</a></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

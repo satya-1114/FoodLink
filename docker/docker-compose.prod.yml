@@ -1,0 +1,27 @@
+# Production compose — designed to run on a single EC2 instance
+# behind an ALB. Swap volumes for EFS / S3 sidecars as needed.
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: foodlink:prod
+    container_name: foodlink-prod
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads:/app/public/uploads
+      - logs:/var/log/foodlink
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  uploads:
+  logs:

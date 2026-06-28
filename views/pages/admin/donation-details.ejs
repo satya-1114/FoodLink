@@ -1,0 +1,41 @@
+<section class="py-4">
+  <div class="container" style="max-width: 820px;">
+    <a href="/admin/donations" class="btn btn-sm btn-outline-secondary mb-3">← Back to donations</a>
+    <div class="card shadow-sm border-0">
+      <% if (donation.imageUrl) { %>
+        <img src="<%= donation.imageUrl %>" class="card-img-top" alt="<%= donation.foodName %>"
+             style="max-height: 320px; object-fit: cover;" />
+      <% } %>
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <h4 class="fw-bold mb-1"><%= donation.foodName %></h4>
+          <span class="badge bg-secondary"><%= donation.status %></span>
+        </div>
+        <div class="text-muted small mb-3">
+          <%= donation.foodCategory %> · <%= donation.vegType %> · <%= donation.city || '—' %>
+        </div>
+        <dl class="row small">
+          <dt class="col-sm-4">Donor ID</dt><dd class="col-sm-8"><%= donation.donorId %></dd>
+          <dt class="col-sm-4">Accepted by NGO</dt><dd class="col-sm-8"><%= donation.acceptedByNgoId || '—' %></dd>
+          <dt class="col-sm-4">Quantity</dt><dd class="col-sm-8"><%= donation.quantity %></dd>
+          <dt class="col-sm-4">Pickup address</dt><dd class="col-sm-8"><%= donation.pickupAddress %></dd>
+          <dt class="col-sm-4">Pickup time</dt>
+          <dd class="col-sm-8"><%= donation.pickupTime ? new Date(donation.pickupTime).toLocaleString() : '—' %></dd>
+          <dt class="col-sm-4">Expires at</dt>
+          <dd class="col-sm-8"><%= donation.expiryTime ? new Date(donation.expiryTime).toLocaleString() : '—' %></dd>
+          <dt class="col-sm-4">Contact</dt><dd class="col-sm-8"><%= donation.contactNumber %></dd>
+          <dt class="col-sm-4">Created</dt><dd class="col-sm-8"><%= new Date(donation.createdAt).toLocaleString() %></dd>
+          <% if (donation.description) { %>
+            <dt class="col-sm-4">Description</dt><dd class="col-sm-8"><%= donation.description %></dd>
+          <% } %>
+        </dl>
+      </div>
+      <div class="card-footer bg-white d-flex justify-content-end">
+        <form method="POST" action="/admin/donations/<%= donation.id %>?_method=DELETE"
+              onsubmit="return confirm('Delete this donation permanently?');">
+          <button class="btn btn-sm btn-danger">Delete donation</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

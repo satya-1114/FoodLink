@@ -1,0 +1,89 @@
+<section class="py-4">
+  <div class="container">
+    <h2 class="fw-bold mb-4">Create Donation</h2>
+    <%- include('../../partials/form-errors', { errors: errors }) %>
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <form method="POST" action="/donor/donations" enctype="multipart/form-data" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Food Name *</label>
+              <input type="text" name="foodName" required maxlength="100"
+                     value="<%= formData.foodName || '' %>" class="form-control" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Category *</label>
+              <select name="foodCategory" required class="form-select">
+                <option value="">Select…</option>
+                <% categories.forEach(function(c){ %>
+                  <option value="<%= c %>" <%= formData.foodCategory === c ? 'selected' : '' %>><%= c %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Veg / Non-Veg *</label>
+              <select name="vegType" required class="form-select">
+                <% vegTypes.forEach(function(v){ %>
+                  <option value="<%= v %>" <%= formData.vegType === v ? 'selected' : '' %>><%= v %></option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Quantity *</label>
+              <input type="text" name="quantity" required maxlength="60" placeholder="e.g. 5 kg / 20 meals"
+                     value="<%= formData.quantity || '' %>" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Pickup Time *</label>
+              <input type="datetime-local" name="pickupTime" required
+                     value="<%= formData.pickupTime || '' %>" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Expiry Time *</label>
+              <input type="datetime-local" name="expiryTime" required
+                     value="<%= formData.expiryTime || '' %>" class="form-control" />
+            </div>
+
+            <div class="col-md-8">
+              <label class="form-label">Pickup Address *</label>
+              <input type="text" name="pickupAddress" required minlength="5" maxlength="250"
+                     value="<%= formData.pickupAddress || '' %>" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">City</label>
+              <input type="text" name="city" maxlength="80" placeholder="e.g. Mumbai"
+                     value="<%= formData.city || '' %>" class="form-control" />
+              <div class="form-text small">Used by NGOs to filter donations.</div>
+            </div>
+
+
+            <div class="col-md-6">
+              <label class="form-label">Contact Number *</label>
+              <input type="tel" name="contactNumber" required pattern="[0-9+\-\s()]{7,20}"
+                     value="<%= formData.contactNumber || '' %>" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Image (optional, max 5 MB)</label>
+              <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif" class="form-control" />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea name="description" rows="3" maxlength="1000"
+                        class="form-control"><%= formData.description || '' %></textarea>
+            </div>
+          </div>
+
+          <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-cloud-arrow-up me-1"></i> Post Donation
+            </button>
+            <a href="/donor/donations" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

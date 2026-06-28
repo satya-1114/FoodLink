@@ -1,0 +1,32 @@
+<%
+  const baseUrl = typeof basePath !== 'undefined' ? basePath : '';
+  function pageUrl(p) {
+    const params = new URLSearchParams(query || {});
+    params.set('page', p);
+    return `${baseUrl}?${params.toString()}`;
+  }
+  const { page, totalPages, total, limit } = result;
+%>
+<% if (total > 0) { %>
+  <nav class="d-flex justify-content-between align-items-center mt-3 small text-muted" aria-label="Pagination">
+    <div>
+      Showing <%= (page - 1) * limit + 1 %>–<%= Math.min(page * limit, total) %>
+      of <%= total %> result<%= total === 1 ? '' : 's' %>
+    </div>
+    <% if (totalPages > 1) { %>
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item <%= page <= 1 ? 'disabled' : '' %>">
+          <a class="page-link" href="<%= pageUrl(Math.max(1, page - 1)) %>">Previous</a>
+        </li>
+        <% for (let p = 1; p <= totalPages; p++) { %>
+          <li class="page-item <%= p === page ? 'active' : '' %>">
+            <a class="page-link" href="<%= pageUrl(p) %>"><%= p %></a>
+          </li>
+        <% } %>
+        <li class="page-item <%= page >= totalPages ? 'disabled' : '' %>">
+          <a class="page-link" href="<%= pageUrl(Math.min(totalPages, page + 1)) %>">Next</a>
+        </li>
+      </ul>
+    <% } %>
+  </nav>
+<% } %>

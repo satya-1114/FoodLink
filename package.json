@@ -1,0 +1,49 @@
+{
+  "name": "foodlink",
+  "version": "1.0.0",
+  "description": "FoodLink - Smart Food Donation & Distribution Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "validate:env": "node scripts/validate-env.js",
+    "healthcheck": "node scripts/healthcheck.js",
+    "seed:admin": "node scripts/seed-admin.js",
+    "aws:create-tables": "node scripts/aws-create-tables.js",
+    "docker:build": "docker build -t foodlink:latest .",
+    "docker:up": "docker compose up -d",
+    "docker:dev": "docker compose -f docker/docker-compose.dev.yml up",
+    "docker:prod": "docker compose -f docker/docker-compose.prod.yml up -d"
+  },
+  "keywords": ["food", "donation", "ngo", "express", "firebase", "aws", "s3", "dynamodb", "sns"],
+  "author": "FoodLink Team",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.658.0",
+    "@aws-sdk/client-s3": "^3.658.0",
+    "@aws-sdk/client-sns": "^3.658.0",
+    "@aws-sdk/lib-dynamodb": "^3.658.0",
+    "@aws-sdk/s3-request-presigner": "^3.658.0",
+    "bcrypt": "^5.1.1",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.2.0",
+    "firebase-admin": "^12.4.0",
+    "helmet": "^7.1.0",
+    "method-override": "^3.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

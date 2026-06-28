@@ -1,0 +1,50 @@
+<section class="py-4">
+  <div class="container" style="max-width: 720px;">
+    <a href="/admin/users" class="btn btn-sm btn-outline-secondary mb-3">← Back to users</a>
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h4 class="fw-bold mb-1"><%= user.name || user.organizationName || '—' %></h4>
+            <div class="text-muted small">
+              <span class="badge bg-light text-dark text-capitalize me-1"><%= user.role %></span>
+              <% if (user.isActive === false) { %>
+                <span class="badge bg-danger">Inactive</span>
+              <% } else { %>
+                <span class="badge bg-success">Active</span>
+              <% } %>
+            </div>
+          </div>
+          <small class="text-muted">Joined <%= new Date(user.createdAt).toLocaleDateString() %></small>
+        </div>
+        <hr />
+        <dl class="row mb-0 small">
+          <dt class="col-sm-4">Email</dt><dd class="col-sm-8"><%= user.email %></dd>
+          <dt class="col-sm-4">Phone</dt><dd class="col-sm-8"><%= user.phone || '—' %></dd>
+          <dt class="col-sm-4">Address</dt><dd class="col-sm-8"><%= user.address || '—' %></dd>
+          <% if (user.role === 'ngo') { %>
+            <dt class="col-sm-4">Organization</dt><dd class="col-sm-8"><%= user.organizationName || '—' %></dd>
+            <dt class="col-sm-4">Reg. Number</dt><dd class="col-sm-8"><%= user.registrationNumber || '—' %></dd>
+          <% } %>
+        </dl>
+      </div>
+      <div class="card-footer bg-white d-flex justify-content-end gap-2">
+        <% if (user.role !== 'admin') { %>
+          <% if (user.isActive === false) { %>
+            <form method="POST" action="/admin/users/<%= user.id %>/activate">
+              <button class="btn btn-sm btn-success">Activate</button>
+            </form>
+          <% } else { %>
+            <form method="POST" action="/admin/users/<%= user.id %>/deactivate">
+              <button class="btn btn-sm btn-warning">Deactivate</button>
+            </form>
+          <% } %>
+          <form method="POST" action="/admin/users/<%= user.id %>?_method=DELETE"
+                onsubmit="return confirm('Delete this user permanently?');">
+            <button class="btn btn-sm btn-danger">Delete user</button>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
